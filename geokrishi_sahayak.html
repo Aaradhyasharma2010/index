@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoKrishi Sahayak 2.0 - Optimal Crop Consultant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#059669', // Emerald 600
+                        'secondary': '#10b981', // Emerald 500
+                        'accent': '#34d399', // Emerald 400
+                        'surface': '#f3f4f6', // Gray 100
+                        'card': '#ffffff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f3f4f6; /* surface */
+            font-family: 'Inter', sans-serif;
+        }
+        .container-shadow {
+            box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1), 0 8px 15px -8px rgba(0,0,0,0.08);
+        }
+        .loading-dot {
+            animation: pulse 1.5s infinite;
+        }
+        .loading-dot:nth-child(2) { animation-delay: 0.5s; }
+        .loading-dot:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 min-h-screen flex items-start justify-center">
+
+    <!-- Main Container -->
+    <div class="w-full max-w-4xl bg-surface rounded-xl container-shadow p-0 md:p-6 transition-all duration-300">
+        
+        <!-- Header -->
+        <header class="bg-primary text-white p-6 md:p-8 rounded-t-xl mb-6">
+            <h1 class="text-3xl font-bold mb-2">GeoKrishi Sahayak 2.0</h1>
+            <p class="text-lg opacity-90">Expert Agricultural Recommendations based on Real Soil Data</p>
+        </header>
+
+        <main class="p-4 md:p-0">
+            <!-- Input Card -->
+            <div class="bg-card p-6 md:p-8 rounded-xl shadow-lg mb-8">
+                <h2 class="text-2xl font-semibold text-primary mb-6 border-b pb-3">1. Farm Details for Optimal Plan</h2>
+                
+                <!-- Input Fields -->
+                <div class="space-y-6">
+                    <div>
+                        <label for="location" class="block text-sm font-medium text-gray-700 mb-1">1. Farm Location (City, State/Region, Country)</label>
+                        <input type="text" id="location" placeholder="e.g., Barabanki, Uttar Pradesh, India" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150">
+                    </div>
+
+                    <div>
+                        <label for="history" class="block text-sm font-medium text-gray-700 mb-1">2. Previous Crop History (Last 2-3 seasons)</label>
+                        <textarea id="history" rows="2" placeholder="e.g., Last season: Rice (High yield). Before that: Wheat (Average yield)." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="soilStatus" class="block text-sm font-medium text-gray-700 mb-1">3. Current Soil Status (N, P, K, pH) - **CRITICAL INPUT**</label>
+                        <input type="text" id="soilStatus" placeholder="e.g., N=150 (kg/ha), P=60 (kg/ha), K=120 (kg/ha), pH=6.5" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150">
+                        <p class="text-xs text-red-500 mt-1">Please enter detailed NPK and pH values for optimal output.</p>
+                    </div>
+                    
+                    <!-- NEW LANGUAGE SELECTOR -->
+                    <div>
+                        <label for="outputLanguage" class="block text-sm font-medium text-gray-700 mb-1">4. Output Language & Clarity</label>
+                        <select id="outputLanguage" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150">
+                            <option value="English">English (Simple)</option>
+                            <option value="Hindi">Hindi (सरल भाषा)</option>
+                        </select>
+                    </div>
+                    <!-- END NEW LANGUAGE SELECTOR -->
+
+                    <button id="generateBtn" 
+                            class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-md text-base font-medium text-white bg-secondary hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition duration-150 ease-in-out disabled:opacity-50"
+                            >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+                            <path fill-rule="evenodd" d="M11.3 1.018a.75.75 0 0 1 .802.164l6.002 5.4a.75.75 0 0 1 0 1.118l-6.002 5.4a.75.75 0 0 1-1.154-.964L15.424 9.5H1.75a.75.75 0 0 1 0-1.5h13.674l-4.426-3.996a.75.75 0 0 1 .352-1.118ZM.75 14.5a.75.75 0 0 1 .75-.75h13.674l-4.426-3.996a.75.75 0 0 1 .802-1.118l6.002 5.4a.75.75 0 0 1 0 1.118l-6.002 5.4a.75.75 0 0 1-1.154-.964L15.424 15.25H1.5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+                        </svg>
+                        Generate Optimal Farm Plan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Output Card -->
+            <div class="bg-card p-6 md:p-8 rounded-xl shadow-lg min-h-[200px]">
+                <h2 class="text-2xl font-semibold text-primary mb-4 border-b pb-3">2. Optimal Farm Plan & Recommendations</h2>
+                
+                <div id="loadingIndicator" class="hidden text-center py-10">
+                    <div class="flex items-center justify-center space-x-2">
+                        <span class="text-gray-600 text-lg">Analyzing Soil Data...</span>
+                        <div class="loading-dot w-3 h-3 bg-secondary rounded-full"></div>
+                        <div class="loading-dot w-3 h-3 bg-secondary rounded-full"></div>
+                        <div class="loading-dot w-3 h-3 bg-secondary rounded-full"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">Connecting to agricultural knowledge base for grounded advice.</p>
+                </div>
+
+                <div id="outputContent" class="prose max-w-none text-gray-700">
+                    <p class="text-gray-500 italic">Enter your farm details above, including the critical NPK/pH values, and click 'Generate' to receive a highly tailored, optimal farming plan.</p>
+                </div>
+
+                <div id="sourceAttributions" class="mt-6 pt-4 border-t border-gray-200 hidden">
+                    <h4 class="text-sm font-semibold text-gray-600 mb-2">Sources Consulted:</h4>
+                    <ul id="sourceList" class="text-xs text-gray-500 space-y-1">
+                        <!-- Sources will be injected here -->
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript for API Interaction -->
+    <script>
+        // Global variables provided by the Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        
+        /************************************************************************
+         * CRITICAL STEP: API KEY INSERTION                                    *
+         * To run this file locally or on free hosting, replace the empty      *
+         * quotes below with your actual Gemini API Key.                       *
+         ************************************************************************/
+        const apiKey = "AIzaSyB2y5ux5P0nzQzDZgJ1WpsTIdSGaVfLOhM"; // <--- PASTE YOUR KEY HERE (e.g., "AIzaSy...")
+
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        // Utility function for exponential backoff retry logic
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status !== 429) { // Not a rate limit error
+                        return response;
+                    }
+                    // Rate limit error: wait and retry
+                    const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                } catch (error) {
+                    console.error("Fetch attempt failed:", error);
+                    if (i === maxRetries - 1) throw error;
+                    const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+            throw new Error("Maximum retries exceeded.");
+        }
+
+        // Main function to generate the farm plan
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const location = document.getElementById('location').value.trim();
+            const history = document.getElementById('history').value.trim();
+            const soilStatus = document.getElementById('soilStatus').value.trim();
+            const outputLanguage = document.getElementById('outputLanguage').value; // Read selected language
+            
+            const generateBtn = document.getElementById('generateBtn');
+            const outputContent = document.getElementById('outputContent');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const sourceAttributions = document.getElementById('sourceAttributions');
+            const sourceList = document.getElementById('sourceList');
+
+            if (!location || !soilStatus) {
+                outputContent.innerHTML = '<p class="text-red-600 font-medium">Location and Current Soil Status are mandatory inputs. Please fill them out.</p>';
+                return;
+            }
+
+            // --- State Management ---
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...';
+            outputContent.innerHTML = '';
+            sourceAttributions.classList.add('hidden');
+            loadingIndicator.classList.remove('hidden');
+
+            // System prompt updated to enforce simpler language
+            const systemPrompt = `You are GeoKrishi Sahayak, an expert agricultural consultant for developing countries. Your task is to provide optimal, grounded, and practical farming recommendations using **simple, easy-to-understand, non-technical language** (saral bhasha). 
+            
+            **CRITICAL:** You MUST analyze the provided **Location**, **Previous Crop History**, and **Current Soil NPK/pH Status** to ensure the advice is highly tailored and specific. 
+            
+            Structure your detailed output using clear Markdown headings (###) into three sections:
+            1. Optimal Crop Rotation & Selection
+            2. Custom Fertilization & Soil Amendment Plan
+            3. Regional Best Practices & Risk Advisory`;
+            
+            // User query updated to request output in the selected language
+            const userQuery = `Analyze the following farm data and generate the optimal farm plan:
+            1. Location: ${location}
+            2. Previous Crop History: ${history || 'None provided.'}
+            3. Current Soil NPK/pH Status: ${soilStatus}
+            
+            Provide a detailed and actionable report in Markdown format. The final output MUST be presented entirely in the **${outputLanguage}** language.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }], // Enable grounding for current, regional information
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+            };
+
+            try {
+                const response = await fetchWithRetry(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    // 1. Extract the generated text
+                    const text = candidate.content.parts[0].text;
+                    outputContent.innerHTML = marked.parse(text); // Use marked.js for Markdown to HTML conversion
+
+                    // 2. Extract and display grounding sources
+                    let sources = [];
+                    const groundingMetadata = candidate.groundingMetadata;
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        sources = groundingMetadata.groundingAttributions
+                            .map(attribution => ({
+                                uri: attribution.web?.uri,
+                                title: attribution.web?.title,
+                            }))
+                            .filter(source => source.uri && source.title);
+                    }
+
+                    if (sources.length > 0) {
+                        sourceList.innerHTML = '';
+                        sources.forEach((source, index) => {
+                            const li = document.createElement('li');
+                            li.innerHTML = `<a href="${source.uri}" target="_blank" class="text-primary hover:underline">${source.title}</a>`;
+                            sourceList.appendChild(li);
+                        });
+                        sourceAttributions.classList.remove('hidden');
+                    } else {
+                        sourceAttributions.classList.add('hidden');
+                    }
+
+                } else {
+                    // This block is hit if the key is invalid or if the model's response is filtered.
+                    outputContent.innerHTML = '<p class="text-red-600 font-medium">Sorry, I couldn\'t generate a recommendation. The AI model returned an empty or unexpected response. This is often due to missing authentication (API Key) or content filtering.</p>';
+                }
+
+            } catch (error) {
+                console.error("API call failed:", error);
+                outputContent.innerHTML = `<p class="text-red-600 font-medium">An error occurred while connecting to the server. Please try again. (${error.message})</p>`;
+            } finally {
+                // --- Cleanup State ---
+                loadingIndicator.classList.add('hidden');
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M11.3 1.018a.75.75 0 0 1 .802.164l6.002 5.4a.75.75 0 0 1 0 1.118l-6.002 5.4a.75.75 0 0 1-1.154-.964L15.424 9.5H1.75a.75.75 0 0 1 0-1.5h13.674l-4.426-3.996a.75.75 0 0 1 .352-1.118ZM.75 14.5a.75.75 0 0 1 .75-.75h13.674l-4.426-3.996a.75.75 0 0 1 .802-1.118l6.002 5.4a.75.75 0 0 1 0 1.118l-6.002 5.4a.75.75 0 0 1-1.154-.964L15.424 15.25H1.5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" /></svg> Generate Optimal Farm Plan';
+            }
+        });
+    </script>
+
+    <!-- External Library for Markdown Rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+</html>
